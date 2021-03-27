@@ -12,4 +12,13 @@ class MovieRepository(private val api: TmdbApi) : BaseRepository() {
 
         return movieResponse?.results?.toMutableList()
     }
+
+    suspend fun getSelectedMovie(movieId: Int): TmdbMovie? {
+        val response = safeApiCall(
+                { api.getSelectedMovie(movieId).await() },
+                "Error fetching selected movie $movieId"
+        )
+
+        return response?.result
+    }
 }

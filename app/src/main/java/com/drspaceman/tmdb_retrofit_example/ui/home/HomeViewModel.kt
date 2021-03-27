@@ -29,10 +29,18 @@ class HomeViewModel : ViewModel() {
     val popularMovies: LiveData<List<TmdbMovie>>
         get() = _popularMovies
 
-    fun fetchMoviews() = viewModelScope.launch {
+    private val _selectedMovie = MutableLiveData<TmdbMovie>()
+
+    val selectedMovie: LiveData<TmdbMovie>
+        get() = _selectedMovie
+
+    fun fetchMovies() = viewModelScope.launch {
         _popularMovies.postValue(repository.getPopularMovies())
     }
 
+    fun fetchMovie(movieId: Int) = viewModelScope.launch {
+        _selectedMovie.postValue(repository.getSelectedMovie(movieId))
+    }
 
     // @Todo remove
     private val _text = MutableLiveData<String>().apply {

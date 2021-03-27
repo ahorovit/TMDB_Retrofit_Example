@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
 //            textView.text = it
 //        })
 
-        homeViewModel.fetchMoviews()
+        homeViewModel.fetchMovies()
 
         homeViewModel.popularMovies.observe(viewLifecycleOwner, Observer {
 
