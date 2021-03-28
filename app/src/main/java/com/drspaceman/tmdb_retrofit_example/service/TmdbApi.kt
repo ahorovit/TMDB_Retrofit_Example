@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface TmdbApi {
-    @GET("/configuration")
+    @GET("configuration")
     fun getApiConfiguration(): Deferred<Response<TmdbConfigResponse>>
 
     @GET("movie/popular")

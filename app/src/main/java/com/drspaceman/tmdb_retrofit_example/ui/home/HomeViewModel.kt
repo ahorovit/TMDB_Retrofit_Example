@@ -14,6 +14,15 @@ class HomeViewModel : ViewModel() {
 
     private val _popularMovies = MutableLiveData<List<TmdbMovie>>()
 
+    init {
+        viewModelScope.launch {
+            val tmdbApiConfig = repository.getTmdbApiConfig()
+
+            TmdbMovie.imgBaseUrl = tmdbApiConfig?.secure_base_url
+            TmdbMovie.posterSizes = tmdbApiConfig?.poster_sizes
+        }
+    }
+
     val popularMovies: LiveData<List<TmdbMovie>>
         get() = _popularMovies
 

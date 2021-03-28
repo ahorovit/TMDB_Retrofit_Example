@@ -14,7 +14,7 @@ data class TmdbMovie(
                         return null
                 }
 
-                var fileSize = "w500"
+                var fileSize = "w300"
 
                 return "$imgBaseUrl$fileSize$poster_path"
 
