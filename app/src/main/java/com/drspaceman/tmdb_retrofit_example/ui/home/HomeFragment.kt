@@ -10,41 +10,45 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.drspaceman.tmdb_retrofit_example.R
+import com.drspaceman.tmdb_retrofit_example.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var homeViewModel: HomeViewModel
-
-    private lateinit var popularRecyclerView: RecyclerView
     private lateinit var popularAdapter: MovieRecyclerviewAdapter
-
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+    ): View {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        preparePopularMoviesRecyclerView(root)
 
-        homeViewModel.fetchMovies()
+        setupPopularMovies()
+
+        return binding.root
+    }
+
+    private fun setupPopularMovies() {
+        popularAdapter = MovieRecyclerviewAdapter()
+        binding.recyclerviewHomePopularmovies.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        binding.recyclerviewHomePopularmovies.itemAnimator = DefaultItemAnimator()
+        binding.recyclerviewHomePopularmovies.adapter = popularAdapter
 
         homeViewModel.popularMovies.observe(viewLifecycleOwner, Observer {
             popularAdapter.movieList = it
             popularAdapter.notifyDataSetChanged()
         })
 
-        return root
+        homeViewModel.fetchMovies()
     }
 
-    private fun preparePopularMoviesRecyclerView(root: View) {
-        popularAdapter = MovieRecyclerviewAdapter()
-        popularRecyclerView = root.findViewById(R.id.recyclerview_home_popularmovies)
-        popularRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        popularRecyclerView.itemAnimator = DefaultItemAnimator()
-        popularRecyclerView.adapter = popularAdapter
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
