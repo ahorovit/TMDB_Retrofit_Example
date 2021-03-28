@@ -1,39 +1,42 @@
 package com.drspaceman.tmdb_retrofit_example.ui.home
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.drspaceman.tmdb_retrofit_example.R
 import com.drspaceman.tmdb_retrofit_example.data.TmdbMovie
+import com.drspaceman.tmdb_retrofit_example.databinding.ViewholderHomeMovieBinding
 
-class MovieRecyclerviewAdapter: RecyclerView.Adapter<MovieViewHolder>() {
-
+class MovieRecyclerviewAdapter : RecyclerView.Adapter<MovieRecyclerviewAdapter.MovieViewHolder>() {
     var movieList: List<TmdbMovie> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.viewholder_home_movie, parent, false)
+        val binding = ViewholderHomeMovieBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent, false
+        )
 
-        return MovieViewHolder(itemView)
+        return MovieViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val movie = movieList[position]
-//        holder.image.setImageResource(movie.poster_path) // @todo: call API for image, load via Glide
-        holder.title.text = movie.title
-        holder.year.text = movie.release_date
+        with(holder) {
+            val movie = movieList[position]
+            binding.textviewHomeMovietitle.text = movie.title
+            binding.textviewHomeMovieyear.text = movie.release_date.substring(0, 4)
+
+            // @todo: call API for image, load via Glide
+//                GlideApp.with(holder.itemView.context)
+//                    .load(badgeUrl)
+//                    .into(binding.topLearnerImage)
+
+//            itemView.setOnClickListener {
+//                // TODO: load details page
+//            }
+        }
     }
 
-    override fun getItemCount(): Int {
-        return movieList.size
-    }
-}
+    override fun getItemCount() = movieList.size
 
-class MovieViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-    val image: ImageView = itemView.findViewById(R.id.imageview_home_movieposter)
-    val title: TextView = itemView.findViewById(R.id.textview_home_movietitle)
-    val year: TextView = itemView.findViewById(R.id.textview_home_movieyear)
+    inner class MovieViewHolder(val binding: ViewholderHomeMovieBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }
