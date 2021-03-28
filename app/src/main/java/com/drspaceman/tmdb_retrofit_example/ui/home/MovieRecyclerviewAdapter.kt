@@ -3,6 +3,8 @@ package com.drspaceman.tmdb_retrofit_example.ui.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.drspaceman.tmdb_retrofit_example.R
 import com.drspaceman.tmdb_retrofit_example.data.TmdbMovie
 import com.drspaceman.tmdb_retrofit_example.databinding.ViewholderHomeMovieBinding
 
@@ -24,10 +26,13 @@ class MovieRecyclerviewAdapter : RecyclerView.Adapter<MovieRecyclerviewAdapter.M
             binding.textviewHomeMovietitle.text = movie.title
             binding.textviewHomeMovieyear.text = movie.release_date.substring(0, 4)
 
-            // @todo: call API for image, load via Glide
-//                GlideApp.with(holder.itemView.context)
-//                    .load(badgeUrl)
-//                    .into(binding.topLearnerImage)
+                Glide.with(holder.itemView)
+                    .load(movie.getPosterUrl())
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_movie_generic)
+                    .error(R.drawable.ic_image_broken)
+                    .fallback(R.drawable.ic_movie_generic)
+                    .into(binding.imageviewHomeMovieposter)
 
 //            itemView.setOnClickListener {
 //                // TODO: load details page

@@ -1,8 +1,32 @@
 package com.drspaceman.tmdb_retrofit_example.service
 
+import com.drspaceman.tmdb_retrofit_example.data.TmdbConfig
 import com.drspaceman.tmdb_retrofit_example.data.TmdbMovie
+import kotlinx.coroutines.*
 
 class MovieRepository(private val api: TmdbApi) : BaseRepository() {
+
+//    private var tmdbApiConfig: TmdbConfig? = null
+
+    init {
+        // @todo: scope this
+        GlobalScope.launch {
+            val tmdbApiConfig = getTmdbApiConfig()
+
+            TmdbMovie.imgBaseUrl = tmdbApiConfig?.base_url
+            TmdbMovie.posterSizes = tmdbApiConfig?.poster_sizes
+        }
+    }
+
+    private suspend fun getTmdbApiConfig(): TmdbConfig? {
+        val configResponse = safeApiCall(
+            { api.getApiConfiguration().await() },
+            "Error fetching Tmdb API Configuration"
+        )
+
+        return configResponse?.result
+    }
+
 
     suspend fun getPopularMovies(): List<TmdbMovie>? {
         val movieResponse = safeApiCall(
