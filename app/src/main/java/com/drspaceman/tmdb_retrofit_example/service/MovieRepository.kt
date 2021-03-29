@@ -2,7 +2,6 @@ package com.drspaceman.tmdb_retrofit_example.service
 
 import com.drspaceman.tmdb_retrofit_example.data.TmdbConfig
 import com.drspaceman.tmdb_retrofit_example.data.TmdbMovie
-import kotlinx.coroutines.*
 
 class MovieRepository(private val api: TmdbApi) : BaseRepository() {
     suspend fun getTmdbApiConfig(): TmdbConfig? {
@@ -13,7 +12,6 @@ class MovieRepository(private val api: TmdbApi) : BaseRepository() {
 
         return configResponse?.images
     }
-
 
     suspend fun getPopularMovies(): List<TmdbMovie>? {
         val movieResponse = safeApiCall(
